@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document><Style id="red"><IconStyle><Icon><href>http://maps.google.com/mapfiles/ms/icons/red-dot.png</href></Icon></IconStyle></Style><Style id="yellow"><IconStyle><Icon><href>http://maps.google.com/mapfiles/ms/icons/yellow-dot.png</href></Icon></IconStyle></Style><Style id="green"><IconStyle><Icon><href>http://maps.google.com/mapfiles/ms/icons/green-dot.png</href></Icon></IconStyle></Style><Folder><name>Wifi Networks</name>
+<Placemark>
+<name><![CDATA[Liza]]></name>
+<description><![CDATA[BSSID: <b>8c:59:c3:ea:db:4a</b><br/>Capabilities: <b>[WPA2-PSK-CCMP][ESS][BLE]</b><br/>Frequency: <b>2412</b><br/>Timestamp: <b>1512117845000</b><br/>Date: <b>2017-12-01 10:44:05</b>]]></description><styleUrl>#red</styleUrl>
+<altitude>2744.0</altitude>
+<Point>
+<altitudeMode>absolute</altitudeMode>
+<coordinates>34.81190851897319,32.17188758190333, 555</coordinates></Point>
+</Placemark>
+<Placemark>
+<name><![CDATA[oved-main_2EX]]></name>
+<description><![CDATA[BSSID: <b>74:da:38:97:66:9d</b><br/>Capabilities: <b>[WPA2-PSK-CCMP][WPS][ESS]</b><br/>Frequency: <b>2437</b><br/>Timestamp: <b>1512118259999</b><br/>Date: <b>2017-12-01 10:50:59</b>]]></description><styleUrl>#red</styleUrl>
+<altitude>2744.0</altitude>
+<Point>
+<altitudeMode>absolute</altitudeMode>
+<coordinates>34.81092582224991,32.16988410573102, 666</coordinates></Point>
+</Placemark>
+</Folder>
+</Document></kml>

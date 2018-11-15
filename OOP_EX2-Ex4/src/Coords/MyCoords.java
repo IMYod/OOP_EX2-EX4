@@ -43,15 +43,22 @@ public class MyCoords implements coords_converter {
 
 	@Override
 	public double[] azimuth_elevation_dist(Point3D gps0, Point3D gps1) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		double diffLat = gps1.x()-gps0.x();
+		double diffLon = gps1.y()-gps0.y();
+		double azimuth = Math.atan(diffLat/diffLon);
+		
+		double diffAlt = gps1.z()-gps0.z();
+		double distance = this.distance3d(gps0, gps1);
+		double elevation = Math.asin(diffAlt/distance);
+		
+		return new double[]{azimuth, elevation, distance}; 
 	}
 
 	@Override
 	public boolean isValid_GPS_Point(Point3D p) {
 		return (p.x()<=180 && p.x()>=-180 &&
-				p.y()<=90 && p.y()>=90 &&
+				p.y()<=90 && p.y()>=-90 &&
 				p.z()>=-450);
 	}
-
 }

@@ -1,7 +1,14 @@
 package Coords;
-
+import java.util.Arrays;
 import Geom.Point3D;
-
+/**
+ * This class implements coords_converter , Which help in building the geographical
+ *  infrastructure of points in space, finding distances computation degrees of the points on the earth 
+ *  and so on...
+ * 
+ * @author Yoav & elad
+ *
+ */
 public class MyCoords implements coords_converter {
 
 	private final double EarthRadius = 6371000;
@@ -42,18 +49,42 @@ public class MyCoords implements coords_converter {
 	}
 
 	@Override
-	public double[] azimuth_elevation_dist(Point3D gps0, Point3D gps1) {
-		
+	public double[] azimuth_elevation_dist(Point3D gps0, Point3D gps1) 
+	{	
 		double diffLat = gps1.x()-gps0.x();
 		double diffLon = gps1.y()-gps0.y();
-		double azimuth = Math.atan(diffLat/diffLon);
+		double azimuth;
+		if(diffLon >0) 
+		{
+			if (diffLat>0)
+				azimuth = ((Math.PI/180)*(Math.atan(diffLat/diffLon)));
+			else
+				azimuth = ((180)-((Math.PI/180)*(Math.atan(diffLat/diffLon))));		
+		}
+		else 
+			{ 
+			if(diffLat<0) 
+				azimuth = ((180)+((Math.PI/180)*(Math.atan(diffLat/diffLon))));
+			else 						
+				azimuth = ((360)-((Math.PI/180)*(Math.atan(diffLat/diffLon))));
+			}
 		
 		double diffAlt = gps1.z()-gps0.z();
 		double distance = this.distance3d(gps0, gps1);
 		double elevation = Math.asin(diffAlt/distance);
-		
 		return new double[]{azimuth, elevation, distance}; 
 	}
+	
+	/**
+	 * 
+	 * Delete after runing the azimute!!!!
+	 */
+	public static void main(String[] args) {
+		Point3D a = new Point3D(32.10332,35.20904,32);
+		Point3D b = new Point3D(32.10635,35.60523,99.9);
+		MyCoords me = new MyCoords();
+		System.out.println(Arrays.toString(me.azimuth_elevation_dist(a,b)));
+		}
 
 	@Override
 	public boolean isValid_GPS_Point(Point3D p) {

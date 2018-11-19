@@ -12,18 +12,18 @@ import Geom.Point3D;
 public class MyCoords implements coords_converter {
 
 	private final double EarthRadius = 6371000;
-	
+
 	@Override
 	public Point3D add(Point3D gps, Point3D local_vector_in_meter) {
 		double diffLatRadian = Math.asin(local_vector_in_meter.x()/EarthRadius);
-		double Lat = diffLatRadian*180 / Math.PI;
-		
+		double Lat = gps.x() + diffLatRadian*180 / Math.PI;
+
 		double lonNormal = Math.cos(gps.x()*Math.PI/180);
 		double diffLonRadian = Math.asin(local_vector_in_meter.y()/(EarthRadius*lonNormal));
-		double Lon = diffLonRadian*180 / Math.PI;
-		
+		double Lon = gps.y() + diffLonRadian*180 / Math.PI;
+
 		double Alt = gps.z() + local_vector_in_meter.z();
-		
+
 		return new Point3D(Lat, Lon, Alt);
 	}
 
@@ -39,12 +39,12 @@ public class MyCoords implements coords_converter {
 		double diffLon = gps1.y()-gps0.y();
 		double diffAlt = gps1.z()-gps0.z();
 		double lonNormal = Math.cos(gps0.x()*Math.PI/180);
-		
+
 		double diffLatRadian = diffLat*Math.PI/180;
 		double diffLonRadian = diffLon*Math.PI/180;
 		double diffLatMeters = Math.sin(diffLatRadian)*EarthRadius;
 		double diffLonMeters = Math.sin(diffLonRadian)*EarthRadius*lonNormal;
-		
+
 		return new Point3D(diffLatMeters, diffLonMeters, diffAlt);
 	}
 
@@ -53,28 +53,28 @@ public class MyCoords implements coords_converter {
 	{	
 		double diffLat = gps1.x()-gps0.x();
 		double diffLon = gps1.y()-gps0.y();
-		double azimuth;
-		if(diffLon >0) 
-		{
-			if (diffLat>0)
-				azimuth = ((Math.PI/180)*(Math.atan(diffLat/diffLon)));
-			else
-				azimuth = ((180)-((Math.PI/180)*(Math.atan(diffLat/diffLon))));		
+		double diffLatRadian = Math.toRadians(diffLat);
+		double diffLonRadian = Math.toRadians(diffLon);
+		
+		double azimuth = Math.toDegrees(Math.atan(diffLonRadian/diffLatRadian));
+		if(diffLon >0) {
+			if (diffLat<0)
+				azimuth = 180 - azimuth;
 		}
 		else 
-			{ 
+		{ 
 			if(diffLat<0) 
-				azimuth = ((180)+((Math.PI/180)*(Math.atan(diffLat/diffLon))));
+				azimuth += 180;
 			else 						
-				azimuth = ((360)-((Math.PI/180)*(Math.atan(diffLat/diffLon))));
-			}
-		
+				azimuth = 360 - azimuth;
+		}
+
 		double diffAlt = gps1.z()-gps0.z();
 		double distance = this.distance3d(gps0, gps1);
 		double elevation = Math.asin(diffAlt/distance);
 		return new double[]{azimuth, elevation, distance}; 
 	}
-	
+
 	/**
 	 * 
 	 * Delete after runing the azimute!!!!
@@ -84,7 +84,7 @@ public class MyCoords implements coords_converter {
 		Point3D b = new Point3D(32.10635,35.60523,99.9);
 		MyCoords me = new MyCoords();
 		System.out.println(Arrays.toString(me.azimuth_elevation_dist(a,b)));
-		}
+	}
 
 	@Override
 	public boolean isValid_GPS_Point(Point3D p) {
@@ -92,4 +92,6 @@ public class MyCoords implements coords_converter {
 				p.y()<=90 && p.y()>=-90 &&
 				p.z()>=-450);
 	}
+	
+	
 }

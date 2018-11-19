@@ -117,7 +117,7 @@ public class Csv2kml {
 	}
 	
 	public static void main(String[] args) {
-		Csv2kml first = new Csv2kml("WigleWifi_20171203085618.csv");
+		Csv2kml first = new Csv2kml("WigleWifi_20171201110209.csv");
 		first.convert();
 	}
 }

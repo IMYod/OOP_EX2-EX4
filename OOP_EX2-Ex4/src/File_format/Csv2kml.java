@@ -14,12 +14,18 @@ public class Csv2kml {
 	private final String cvsSplitBy = ","; //the character separator of the csv file
 	private String[] title; //the titles of the csv file, separated
 	private int CurrentLatitude, CurrentLongitude, AltitudeMeters;
-
-	Csv2kml(String name){
+	
+	public void convert(String name){
 		csvName = name; // in the format: "name.csv"
+		convert();
+	}
+	
+	public void convert(File f) {
+		csvName = f.getName();
+		convert();
 	}
 
-	public void convert() {
+	private void convert() {
 		try (BufferedReader br = new BufferedReader(new FileReader(csvName))) 
 		{
 			String[] csvRow; //one row from the csv file, separated
@@ -117,7 +123,7 @@ public class Csv2kml {
 	}
 	
 	public static void main(String[] args) {
-		Csv2kml first = new Csv2kml("WigleWifi_20171201110209.csv");
-		first.convert();
+		Csv2kml first = new Csv2kml();
+		first.convert("WigleWifi_20171201110209.csv");
 	}
 }

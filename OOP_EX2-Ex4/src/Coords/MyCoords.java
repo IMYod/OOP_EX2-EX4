@@ -32,6 +32,11 @@ public class MyCoords implements coords_converter {
 		Point3D vector = vector3D(gps0, gps1);
 		return vector.distance3D(0, 0, 0);	
 	}
+	
+	public double distance2D(Point3D gps0, Point3D gps1) {
+		Point3D vector = vector3D(gps0, gps1);
+		return vector.distance2D(new Point3D(0,0,0));	
+	}
 
 	@Override
 	public Point3D vector3D(Point3D gps0, Point3D gps1) {
@@ -51,47 +56,51 @@ public class MyCoords implements coords_converter {
 	@Override
 	public double[] azimuth_elevation_dist(Point3D gps0, Point3D gps1) 
 	{	
+		 
+		double azimuth;
+		
+		Point3D vectorNorth = this.vector3D(gps0, new Point3D(gps0.x()+0.01, gps0.y(), 0));
+		Point3D vector = this.vector3D(gps0, gps1);
+		double skalarMultuply2D = vectorNorth.x()*vector.x()+ vectorNorth.y()*vector.y();
+		double cosAzimuth = skalarMultuply2D/(vectorNorth.distance2D(new Point3D(0,0,0))*vector.distance2D(new Point3D(0,0,0)));
+		azimuth = Math.toDegrees(Math.acos(cosAzimuth));
+		
 		double diffLat = gps1.x()-gps0.x();
 		double diffLon = gps1.y()-gps0.y();
 		double diffLatRadian = Math.toRadians(diffLat);
 		double diffLonRadian = Math.toRadians(diffLon);
 		
-		double azimuth = Math.toDegrees(Math.atan(diffLonRadian/diffLatRadian));
-		if(diffLon >0) {
-			if (diffLat<0)
-				azimuth = 180 - azimuth;
-		}
-		else 
-		{ 
-			if(diffLat<0) 
-				azimuth += 180;
-			else 						
-				azimuth = 360 - azimuth;
-		}
-
+//		azimuth = Math.toDegrees(Math.atan(diffLon/diffLat));
+//		
+//		if(diffLon > 0) {
+//			if (diffLat < 0)
+//				azimuth = 180 - azimuth;
+//		}
+//		else 
+//		{ 
+//			if(diffLat < 0) 
+//				azimuth += 180;
+//			else 						
+//				azimuth = 360 - azimuth;
+//		}		
+//		
+//		azimuth = 90 - Math.toDegrees(Math.atan(diffLon/diffLat));
+		
 		double diffAlt = gps1.z()-gps0.z();
-		double distance = this.distance3d(gps0, gps1);
-		double elevation = Math.asin(diffAlt/distance);
-		return new double[]{azimuth, elevation, distance}; 
-	}
-
-	/**
-	 * 
-	 * Delete after runing the azimute!!!!
-	 */
-	public static void main(String[] args) {
-		Point3D a = new Point3D(32.10332,35.20904,32);
-		Point3D b = new Point3D(32.10635,35.60523,99.9);
-		MyCoords me = new MyCoords();
-		System.out.println(Arrays.toString(me.azimuth_elevation_dist(a,b)));
+		
+		double distance3D = this.distance3d(gps0, gps1);
+		double elevation = Math.toDegrees(Math.asin(diffAlt/distance3D));
+		
+		double distance2D = this.distance2D(gps0, gps1);
+		return new double[]{azimuth, elevation, distance2D}; 
 	}
 
 	@Override
 	public boolean isValid_GPS_Point(Point3D p) {
-		return (p.x()<=180 && p.x()>=-180 &&
-				p.y()<=90 && p.y()>=-90 &&
+		return (p.x()<=90 && p.x()>=-90 &&
+				p.y()<=1800 && p.y()>=-1800 &&
 				p.z()>=-450);
 	}
-	
-	
+
+
 }

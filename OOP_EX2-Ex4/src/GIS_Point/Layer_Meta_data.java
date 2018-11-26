@@ -1,10 +1,14 @@
 package GIS_Point;
 
+import java.util.Date;
+
 import GIS.Meta_data;
 import Geom.Point3D;
 
-public class Point_GIS_layer_Meta_data implements Meta_data {
-
+public class Layer_Meta_data implements Meta_data {
+	
+	protected long minTime = Long.MAX_VALUE;
+	
 	@Override
 	public long getUTC() {
 		// TODO Auto-generated method stub

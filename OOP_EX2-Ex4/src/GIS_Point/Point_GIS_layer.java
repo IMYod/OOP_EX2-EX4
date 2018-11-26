@@ -9,12 +9,13 @@ import GIS.Meta_data;
 
 public class Point_GIS_layer implements GIS_layer {
 	
-	Point_GIS_layer_Meta_data metaData;
+	Layer_Meta_data metaData;
 	
 	@Override
 	public boolean add(GIS_element arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		if (arg0.getData().getUTC() < metaData.getUTC())
+			metaData.minTime =  arg0.getData().getUTC();
+		return super().add(arg0);
 	}
 
 	@Override

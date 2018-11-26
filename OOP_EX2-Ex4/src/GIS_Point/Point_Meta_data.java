@@ -1,43 +1,41 @@
 package GIS_Point;
 
+import java.sql.Date;
 import java.sql.Time;
+import java.util.TreeMap;
 
 import GIS.Meta_data;
 import Geom.Point3D;
 
 public class Point_Meta_data implements Meta_data {
 
-	Time firstSeen;
-	Point3D orientation = new Point3D(0,0,0);
+	private long firstSeen;
+	private TreeMap data = new TreeMap();
 	
-	String[] data = new String[7];
-	String MAC = data[0];
-	String SSID = data[1];
-	String AuthMode = data[2];
-	String Channel = data[3];
-	String RSSI = data[4];
-	String AccuracyMeters = data[5];
-	String Type = data[6];
+	public Point_Meta_data(long time) {
+		firstSeen = time;
+	}
+	
+	public boolean addData(Object key, Object value) {
+		if (data.containsKey(key))
+			return false;
+		data.put(key, value);
+		return true;
+	}
 	
 	@Override
 	public long getUTC() {
-		return firstSeen.getTime();
+		return firstSeen;
 	}
 	
 	@Override
 	public String toString() {
-		return("MAC: " + MAC +
-				" SSID: " + SSID +
-				" AuthMode: " + AuthMode +
-				" Channel: " + Channel +
-				" RSSI: " + RSSI +
-				" AccuracyMeters: " + AccuracyMeters +
-				" Type: " + Type);
+		return data.toString();
 	}
 
 	@Override
 	public Point3D get_Orientation() {
-		return orientation;
+		return null;
 	}
 
 }

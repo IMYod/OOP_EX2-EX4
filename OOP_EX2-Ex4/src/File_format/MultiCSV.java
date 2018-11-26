@@ -51,7 +51,7 @@ public class MultiCSV {
 		String name = f.getName();
 		return (name.substring(name.length()-3).equals("csv"));
 	}
-	
+
 	public GIS_layer Csv2GIS_layer(File f) {
 		return GISconvertor.create(f);
 	}

@@ -5,36 +5,37 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import GIS.GIS_element;
 import GIS.GIS_layer;
+import GIS.GIS_project;
+import GIS.GIS_project;
 import GIS.Meta_data;
 
-public class Point_GIS_layer implements GIS_layer {
+public class Point_GIS_project implements GIS_project {
 	
-	private Set<Point_GIS_element> set = new HashSet<Point_GIS_element>();
-	protected Layer_Meta_data metaData;
+	private Set<Point_GIS_layer> set = new HashSet<Point_GIS_layer>();
+	protected project_Meta_data metaData;
 	
-	public Point_GIS_layer(String name) {
-		metaData = new Layer_Meta_data(name);
+	public Point_GIS_project(String name) {
+		metaData = new project_Meta_data(name);
 	}
 	
 	@Override
-	public boolean add(GIS_element o) {
-		if (!(o instanceof Point_GIS_element))
+	public boolean add(GIS_layer o) {
+		if (!(o instanceof Point_GIS_layer))
 			return false;
-		Point_GIS_element element = (Point_GIS_element)o;
-		if (element.getData().getUTC() < metaData.getUTC())
-			metaData.minTime =  element.getData().getUTC();
-		return set.add(element);
+		Point_GIS_layer layer = (Point_GIS_layer)o;
+		if (layer.get_Meta_data().getUTC() < metaData.getUTC())
+			metaData.minTime =  layer.get_Meta_data().getUTC();
+		return set.add(layer);
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends GIS_element> arg0) {
+	public boolean addAll(Collection<? extends GIS_layer> arg0) {
 		
-		for (GIS_element element: arg0)
-			if (!(element instanceof Point_GIS_element))
+		for (GIS_layer layer: arg0)
+			if (!(layer instanceof Point_GIS_layer))
 				return false;
-		boolean answer = set.addAll((Collection<? extends Point_GIS_element>) arg0);
+		boolean answer = set.addAll((Collection<? extends Point_GIS_layer>) arg0);
 		if (answer)
 			metaData.minTime = findMinTime();
 		return answer;
@@ -62,8 +63,8 @@ public class Point_GIS_layer implements GIS_layer {
 	}
 
 	@Override
-	public Iterator<GIS_element> iterator() {
-		return (Iterator<GIS_element>)set.iterator();
+	public Iterator<GIS_layer> iterator() {
+		return (Iterator<GIS_layer>)set.iterator();
 	}
 
 	@Override
@@ -112,9 +113,9 @@ public class Point_GIS_layer implements GIS_layer {
 
 	private long findMinTime() {
 		long min = Long.MAX_VALUE;
-		for (Point_GIS_element element: set)
-			if (element.metaData.getUTC() < min)
-				min = element.metaData.getUTC();
+		for (Point_GIS_layer layer: set)
+			if (layer.metaData.getUTC() < min)
+				min = layer.metaData.getUTC();
 		return min;
 	}
 }

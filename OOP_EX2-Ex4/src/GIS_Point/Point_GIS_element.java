@@ -33,5 +33,5 @@ public class Point_GIS_element implements GIS_element {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 }

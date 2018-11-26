@@ -11,6 +11,7 @@ public class Point_Meta_data implements Meta_data {
 
 	private long firstSeen;
 	private TreeMap data = new TreeMap();
+	String name = "element"; //change it!!!!!!!!!!!!!!
 	
 	public Point_Meta_data(long time) {
 		firstSeen = time;
@@ -36,6 +37,14 @@ public class Point_Meta_data implements Meta_data {
 	@Override
 	public Point3D get_Orientation() {
 		return null;
+	}
+	
+	public String get_name() {
+		return name;
+	}
+	
+	public TreeMap get_data() {
+		return data;
 	}
 
 }

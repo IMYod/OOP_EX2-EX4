@@ -9,9 +9,9 @@ import GIS_Point.Point_GIS_layer;
 import GIS_Point.Point_Meta_data;
 import Geom.Point3D;
 
-public class Point_GIS2Kml {
+public class GIS_layer2Kml {
 
-	public Point_GIS2Kml() {
+	public GIS_layer2Kml() {
 		super();
 	}
 	
@@ -47,6 +47,9 @@ public class Point_GIS2Kml {
 		
 		sb.append("]]></description><styleUrl>#red</styleUrl>\n");
 		
+		sb.append("<TimeStamp>\n" +
+        "<when>" + this.longToKmlTime(Metadata.getUTC()) + "</when>\n" +
+      "</TimeStamp>)");
 		sb.append("<Point>\n");
 
 		sb.append("<coordinates>"+point.x()+", "+ //write coordinates
@@ -58,5 +61,9 @@ public class Point_GIS2Kml {
 
 		sb.append("</Placemark>\n");
 		return sb;
+	}
+
+	private String longToKmlTime(long utc) {
+//		return like 2007-01-14T21:05:02Z
 	}
 }

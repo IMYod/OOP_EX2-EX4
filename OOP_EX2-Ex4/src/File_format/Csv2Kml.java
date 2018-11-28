@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class Csv2kml {
+public class Csv2Kml {
 
 	private String csvName; //name of csv file
 	private StringBuilder kml = new StringBuilder(); //here we build the text of the kml file
@@ -122,8 +122,10 @@ public class Csv2kml {
 		System.out.println("done!");
 	}
 	
+	
+	
 	public static void main(String[] args) {
-		Csv2kml first = new Csv2kml();
+		Csv2Kml first = new Csv2Kml();
 		first.convert("WigleWifi_20171201110209.csv");
 	}
 }

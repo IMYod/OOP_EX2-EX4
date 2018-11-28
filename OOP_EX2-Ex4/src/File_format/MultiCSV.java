@@ -8,6 +8,8 @@ import GIS.GIS_element;
 import GIS.GIS_layer;
 import GIS.GIS_project;
 import GIS.Meta_data;
+import GIS_Point.Point_GIS_layer;
+import GIS_Point.Point_GIS_project;
 
 public class MultiCSV {
 
@@ -15,7 +17,7 @@ public class MultiCSV {
 	private GIS_project project;
 	private File folder;
 	private CSV2GIS_layer GISconvertor = new CSV2GIS_layer();
-	private Csv2kml KMLconvertor = new Csv2kml();
+	private Csv2Kml KMLconvertor = new Csv2Kml();
 
 	//https://stackoverflow.com/questions/10780747/recursively-search-for-a-directory-in-java
 
@@ -38,7 +40,7 @@ public class MultiCSV {
 		}
 		else if(isCSV(directory)) {
 			if (GIS) {
-				project.add(GISconvertor.create(directory));
+				project.add((Point_GIS_layer)GISconvertor.create(directory));
 			}
 			else {
 				System.out.println("converting: " + directory.getAbsolutePath());
@@ -51,9 +53,12 @@ public class MultiCSV {
 		String name = f.getName();
 		return (name.substring(name.length()-3).equals("csv"));
 	}
-
-	public GIS_layer Csv2GIS_layer(File f) {
-		return GISconvertor.create(f);
+	
+	public static void main(String[] args) {
+		MultiCSV input = new MultiCSV();
+		String from = "E:\\yoav\\מדעי המחשב\\סמסטר א\\מונחה עצמים\\מטלה2\\Ex2";
+		Point_GIS_project project = (Point_GIS_project) input.folder2GIS_project(from);
+		System.out.println(project);
 	}
 
 }

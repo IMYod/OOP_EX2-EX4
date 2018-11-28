@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import GIS.GIS_element;
 import GIS.GIS_layer;
 import GIS.GIS_project;
 import GIS.GIS_project;
@@ -21,23 +22,15 @@ public class Point_GIS_project implements GIS_project {
 	
 	@Override
 	public boolean add(GIS_layer o) {
-		if (!(o instanceof Point_GIS_layer))
-			return false;
-		Point_GIS_layer layer = (Point_GIS_layer)o;
-		if (layer.get_Meta_data().getUTC() < metaData.getUTC())
-			metaData.minTime =  layer.get_Meta_data().getUTC();
-		return set.add(layer);
+		boolean answer = set.add((Point_GIS_layer) o);
+		metaData.minTime = findMinTime();
+		return answer;
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends GIS_layer> arg0) {
-		
-		for (GIS_layer layer: arg0)
-			if (!(layer instanceof Point_GIS_layer))
-				return false;
-		boolean answer = set.addAll((Collection<? extends Point_GIS_layer>) arg0);
-		if (answer)
-			metaData.minTime = findMinTime();
+		boolean answer = set.addAll((Collection<? extends Point_GIS_layer>) arg0); 
+		metaData.minTime = findMinTime();
 		return answer;
 	}
 
@@ -64,30 +57,40 @@ public class Point_GIS_project implements GIS_project {
 
 	@Override
 	public Iterator<GIS_layer> iterator() {
-		return (Iterator<GIS_layer>)set.iterator();
+		Iterator<Point_GIS_layer> it = set.iterator();
+		Iterator<GIS_layer> itInner = new Iterator<GIS_layer>() {
+			
+			@Override
+			public GIS_layer next() {
+				return it.next();
+			}
+			
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
+		};
+		return itInner;
 	}
 
 	@Override
 	public boolean remove(Object arg0) {
 		boolean answer = set.remove(arg0);
-		if (set.isEmpty())
-			metaData.minTime = Long.MAX_VALUE;
+		metaData.minTime = findMinTime();
 		return answer;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> arg0) {
 		boolean answer = set.removeAll(arg0);
-		if (set.isEmpty())
-			metaData.minTime = Long.MAX_VALUE;
+		metaData.minTime = findMinTime();
 		return answer;
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> arg0) {
 		boolean answer = set.retainAll(arg0);
-		if (set.isEmpty())
-			metaData.minTime = Long.MAX_VALUE;
+		metaData.minTime = findMinTime();
 		return answer;
 	}
 

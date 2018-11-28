@@ -1,9 +1,5 @@
 package GIS_Point;
 
-import java.util.Date;
-
-import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
-
 import GIS.Meta_data;
 import Geom.Point3D;
 
@@ -14,6 +10,10 @@ public class Layer_Meta_data implements Meta_data {
 	
 	public Layer_Meta_data(String name) {
 		fileName = name;
+	}
+	
+	public String getName( ) {
+		return fileName;
 	}
 	
 	@Override

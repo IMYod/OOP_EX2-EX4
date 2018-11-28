@@ -11,13 +11,15 @@ public class Point_Meta_data implements Meta_data {
 
 	private long firstSeen;
 	private TreeMap data = new TreeMap();
-	String name = "element"; //change it!!!!!!!!!!!!!!
+	String name = ""; //change it!!!!!!!!!!!!!!
 	
 	public Point_Meta_data(long time) {
 		firstSeen = time;
 	}
 	
 	public boolean addData(Object key, Object value) {
+		if (name == "")
+			name = value.toString();
 		if (data.containsKey(key))
 			return false;
 		data.put(key, value);

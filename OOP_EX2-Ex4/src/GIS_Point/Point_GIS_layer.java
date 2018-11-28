@@ -12,7 +12,7 @@ import GIS.Meta_data;
 public class Point_GIS_layer implements GIS_layer {
 	
 	private Set<Point_GIS_element> set = new HashSet<Point_GIS_element>();
-	protected Layer_Meta_data metaData;
+	public Layer_Meta_data metaData;
 	
 	public Point_GIS_layer(String name) {
 		metaData = new Layer_Meta_data(name);
@@ -20,24 +20,17 @@ public class Point_GIS_layer implements GIS_layer {
 	
 	@Override
 	public boolean add(GIS_element o) {
-		if (!(o instanceof Point_GIS_element))
-			return false;
-		Point_GIS_element element = (Point_GIS_element)o;
-		if (element.getData().getUTC() < metaData.getUTC())
-			metaData.minTime =  element.getData().getUTC();
-		return set.add(element);
+		boolean answer = set.add((Point_GIS_element) o);
+		metaData.minTime = findMinTime();
+		return answer;
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends GIS_element> arg0) {
-		
-		for (GIS_element element: arg0)
-			if (!(element instanceof Point_GIS_element))
-				return false;
-		boolean answer = set.addAll((Collection<? extends Point_GIS_element>) arg0);
-		if (answer)
-			metaData.minTime = findMinTime();
+		boolean answer = set.addAll((Collection<? extends Point_GIS_element>) arg0); 
+		metaData.minTime = findMinTime();
 		return answer;
+
 	}
 
 	@Override
@@ -63,30 +56,40 @@ public class Point_GIS_layer implements GIS_layer {
 
 	@Override
 	public Iterator<GIS_element> iterator() {
-		return (Iterator<GIS_element>)set.iterator();
+		Iterator<Point_GIS_element> it = set.iterator();
+		Iterator<GIS_element> itInner = new Iterator<GIS_element>() {
+			
+			@Override
+			public GIS_element next() {
+				return it.next();
+			}
+			
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
+		};
+		return itInner;
 	}
 
 	@Override
 	public boolean remove(Object arg0) {
 		boolean answer = set.remove(arg0);
-		if (set.isEmpty())
-			metaData.minTime = Long.MAX_VALUE;
+		metaData.minTime = findMinTime();
 		return answer;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> arg0) {
 		boolean answer = set.removeAll(arg0);
-		if (set.isEmpty())
-			metaData.minTime = Long.MAX_VALUE;
+		metaData.minTime = findMinTime();
 		return answer;
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> arg0) {
 		boolean answer = set.retainAll(arg0);
-		if (set.isEmpty())
-			metaData.minTime = Long.MAX_VALUE;
+		metaData.minTime = findMinTime();
 		return answer;
 	}
 
@@ -110,7 +113,7 @@ public class Point_GIS_layer implements GIS_layer {
 		return metaData;
 	}
 
-	private long findMinTime() {
+	protected long findMinTime() {
 		long min = Long.MAX_VALUE;
 		for (Point_GIS_element element: set)
 			if (element.metaData.getUTC() < min)

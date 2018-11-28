@@ -7,6 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import GIS.GIS_element;
 import GIS.GIS_layer;
@@ -20,9 +23,10 @@ public class CSV2GIS_layer {
 	private final String cvsSplitBy = ","; //the character separator of the csv file
 	private String[] title; //the titles of the csv file, separated
 	private int CurrentLatitude, CurrentLongitude, AltitudeMeters, timeIndex;
+	public static DateFormat format = new SimpleDateFormat("dd-MM-yyyy' 'hh:mm:ss");
 
-	public GIS_layer create(String str) {
-		csvName = str;
+	public GIS_layer create(String fileName) {
+		csvName = fileName;
 		return create();
 	}
 
@@ -32,8 +36,9 @@ public class CSV2GIS_layer {
 	}
 
 	private GIS_layer create() {
-		GIS_layer layer = new Point_GIS_layer();
-		
+		String name = csvName.substring(0, csvName.length()-5); //delete the end-type ".csv"
+		GIS_layer layer = new Point_GIS_layer(name);
+
 		try (BufferedReader br = new BufferedReader(new FileReader(csvName))) 
 		{
 			String[] csvRow; //one row from the csv file, separated
@@ -59,7 +64,7 @@ public class CSV2GIS_layer {
 
 				case "FirstSeen":
 					timeIndex  = i;
-					
+
 				default:
 					break;
 				}
@@ -77,31 +82,36 @@ public class CSV2GIS_layer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return layer;
 	}
 
 	private GIS_element create(String[] points) {
-		
-		double lat = Integer.parseInt(points[CurrentLatitude]);
-		double lon = Integer.parseInt(points[CurrentLongitude]);
-		double alt = Integer.parseInt(points[AltitudeMeters]);
+
+		double lat = Double.parseDouble(points[CurrentLatitude]);
+		double lon = Double.parseDouble(points[CurrentLongitude]);
+		double alt = Double.parseDouble(points[AltitudeMeters]);
 		long time = this.stringToTime(points[timeIndex]);
-		
+
 		Point3D elemntPoint = new Point3D(lat, lon, alt);
 		Point_GIS_element element = new Point_GIS_element(elemntPoint, time);
-		
+
 		for (int i=0; i<points.length; i++) {
 			if (i != CurrentLatitude && i != CurrentLongitude && i != AltitudeMeters && i != timeIndex)
 				element.metaData.addData(title[i], points[i]);
 		}
-		
+
 		return element;
 	}
-	
-	protected static long stringToTime(String s) {
-		//TODO
-		return Long.MAX_VALUE;
-	}
 
+	protected static long stringToTime(String s) {
+		try {
+			java.util.Date date = format.parse(s);
+			return date.getTime();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return (long)0;
+	}
 }

@@ -3,6 +3,7 @@ package GIS_Point;
 import java.sql.Date;
 import java.sql.Time;
 
+import Coords.MyCoords;
 import GIS.GIS_element;
 import GIS.Meta_data;
 import Geom.Geom_element;
@@ -30,7 +31,8 @@ public class Point_GIS_element implements GIS_element {
 
 	@Override
 	public void translate(Point3D vec) {
-		// TODO Auto-generated method stub
+		MyCoords coord = new  MyCoords();
+		point = coord.add(point, vec);
 
 	}
 	

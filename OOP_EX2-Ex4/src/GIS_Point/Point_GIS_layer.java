@@ -7,36 +7,31 @@ import java.util.Set;
 
 import GIS.GIS_element;
 import GIS.GIS_layer;
+import GIS.GIS_element;
 import GIS.Meta_data;
 
 public class Point_GIS_layer implements GIS_layer {
-	
+
 	private Set<Point_GIS_element> set = new HashSet<Point_GIS_element>();
-	public Layer_Meta_data metaData;
+	protected GIS_Set_Meta_data metaData;
 	
 	public Point_GIS_layer(String name) {
-		metaData = new Layer_Meta_data(name);
+		metaData = new GIS_Set_Meta_data(name);
 	}
 	
 	@Override
 	public boolean add(GIS_element o) {
-		boolean answer = set.add((Point_GIS_element) o);
-		metaData.minTime = findMinTime();
-		return answer;
+		return set.add((Point_GIS_element) o);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends GIS_element> arg0) {
-		boolean answer = set.addAll((Collection<? extends Point_GIS_element>) arg0); 
-		metaData.minTime = findMinTime();
-		return answer;
-
+		return set.addAll((Collection<? extends Point_GIS_element>) arg0); 
 	}
 
 	@Override
 	public void clear() {
 		set.clear();
-		metaData.minTime = Long.MAX_VALUE;
 	}
 
 	@Override
@@ -74,23 +69,17 @@ public class Point_GIS_layer implements GIS_layer {
 
 	@Override
 	public boolean remove(Object arg0) {
-		boolean answer = set.remove(arg0);
-		metaData.minTime = findMinTime();
-		return answer;
+		return set.remove(arg0);
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> arg0) {
-		boolean answer = set.removeAll(arg0);
-		metaData.minTime = findMinTime();
-		return answer;
+		return set.removeAll(arg0);
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> arg0) {
-		boolean answer = set.retainAll(arg0);
-		metaData.minTime = findMinTime();
-		return answer;
+		return set.retainAll(arg0);
 	}
 
 	@Override
@@ -112,12 +101,8 @@ public class Point_GIS_layer implements GIS_layer {
 	public Meta_data get_Meta_data() {
 		return metaData;
 	}
-
-	protected long findMinTime() {
-		long min = Long.MAX_VALUE;
-		for (Point_GIS_element element: set)
-			if (element.metaData.getUTC() < min)
-				min = element.metaData.getUTC();
-		return min;
+	
+	public GIS_Set_Meta_data get_set_Meta_data() {
+		return metaData;
 	}
 }

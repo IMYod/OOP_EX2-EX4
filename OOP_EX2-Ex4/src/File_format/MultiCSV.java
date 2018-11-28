@@ -14,29 +14,30 @@ import GIS_Point.Point_GIS_project;
 public class MultiCSV {
 
 	//	private GIS_project answer = new GIS_project();
-	private GIS_project project;
+	private Point_GIS_project project;
 	private File folder;
 	private CSV2GIS_layer GISconvertor = new CSV2GIS_layer();
 	private Csv2Kml KMLconvertor = new Csv2Kml();
 
 	//https://stackoverflow.com/questions/10780747/recursively-search-for-a-directory-in-java
 
-	public GIS_project folder2GIS_project(String folderName) {
+	public Point_GIS_project folder2GIS_project(String folderName) {
 		folder = new File(folderName);
-		findDirectory(folder, true);
+		project = new Point_GIS_project(folder.getName());
+		searchDirectory(folder, true);
 		return project;
 	}
 	
 	public void convert2kml(String folderName) {
 		folder = new File(folderName);
-		findDirectory(folder, false);
+		searchDirectory(folder, false);
 	}
 
-	private void findDirectory(File directory, boolean GIS) {//GIS true - create GIS, false - create kml
+	private void searchDirectory(File directory, boolean GIS) {//GIS true - create GIS, false - create kml
 		if(directory.isDirectory()) {
 			File[] files = directory.listFiles();
 			for (File file : files)
-				findDirectory(file, GIS);
+				searchDirectory(file, GIS);
 		}
 		else if(isCSV(directory)) {
 			if (GIS) {
@@ -54,11 +55,15 @@ public class MultiCSV {
 		return (name.substring(name.length()-3).equals("csv"));
 	}
 	
-	public static void main(String[] args) {
-		MultiCSV input = new MultiCSV();
-		String from = "E:\\yoav\\מדעי המחשב\\סמסטר א\\מונחה עצמים\\מטלה2\\Ex2";
-		Point_GIS_project project = (Point_GIS_project) input.folder2GIS_project(from);
-		System.out.println(project);
-	}
+//	public static void main(String[] args) {
+//		
+//		MultiCSV input = new MultiCSV();
+//		String path = "E:\\yoav\\מדעי המחשב\\סמסטר א\\מונחה עצמים\\מטלה2\\Ex2";
+//		Point_GIS_project project = input.folder2GIS_project(path);
+//		System.out.println(project.get_set_Meta_data());
+//		
+//		GIS2Kml convertor = new GIS2Kml();
+//		convertor.convert(project, path);
+//	}
 
 }

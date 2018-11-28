@@ -59,32 +59,16 @@ public class MyCoords implements coords_converter {
 		 
 		double azimuth;
 		
-		Point3D vectorNorth = this.vector3D(gps0, new Point3D(gps0.x()+0.01, gps0.y(), 0));
-		Point3D vector = this.vector3D(gps0, gps1);
-		double skalarMultuply2D = vectorNorth.x()*vector.x()+ vectorNorth.y()*vector.y();
-		double cosAzimuth = skalarMultuply2D/(vectorNorth.distance2D(new Point3D(0,0,0))*vector.distance2D(new Point3D(0,0,0)));
-		azimuth = Math.toDegrees(Math.acos(cosAzimuth));
-		
-		double diffLat = gps1.x()-gps0.x();
+		double lat0Radian = Math.toRadians(gps0.x()); //teta1
+		double lat1Radian = Math.toRadians(gps1.x()); //teta2
+//		double diffLat = gps1.x()-gps0.x();
 		double diffLon = gps1.y()-gps0.y();
-		double diffLatRadian = Math.toRadians(diffLat);
-		double diffLonRadian = Math.toRadians(diffLon);
+//		double diffLatRadian = Math.toRadians(diffLat);
+		double diffLonRadian = Math.toRadians(diffLon);  //delta2
 		
-//		azimuth = Math.toDegrees(Math.atan(diffLon/diffLat));
-//		
-//		if(diffLon > 0) {
-//			if (diffLat < 0)
-//				azimuth = 180 - azimuth;
-//		}
-//		else 
-//		{ 
-//			if(diffLat < 0) 
-//				azimuth += 180;
-//			else 						
-//				azimuth = 360 - azimuth;
-//		}		
-//		
-//		azimuth = 90 - Math.toDegrees(Math.atan(diffLon/diffLat));
+		double numerator = Math.sin(diffLonRadian) * Math.cos(lat1Radian);
+		double denominator = Math.cos(lat0Radian)*Math.sin(lat1Radian) - Math.sin(lat0Radian)*Math.cos(lat1Radian)*Math.cos(diffLonRadian);
+		azimuth = (Math.toDegrees(Math.atan2(numerator,denominator))+360) % 360;
 		
 		double diffAlt = gps1.z()-gps0.z();
 		

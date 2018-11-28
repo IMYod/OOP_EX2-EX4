@@ -14,7 +14,7 @@ import GIS.Meta_data;
 public class Point_GIS_project implements GIS_project {
 	
 	private Set<Point_GIS_layer> set = new HashSet<Point_GIS_layer>();
-	protected project_Meta_data metaData;
+	protected GIS_Set_Meta_data metaData;
 	
 	public Point_GIS_project(String name) {
 		metaData = new project_Meta_data(name);
@@ -22,22 +22,17 @@ public class Point_GIS_project implements GIS_project {
 	
 	@Override
 	public boolean add(GIS_layer o) {
-		boolean answer = set.add((Point_GIS_layer) o);
-		metaData.minTime = findMinTime();
-		return answer;
+		return set.add((Point_GIS_layer) o);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends GIS_layer> arg0) {
-		boolean answer = set.addAll((Collection<? extends Point_GIS_layer>) arg0); 
-		metaData.minTime = findMinTime();
-		return answer;
+		return set.addAll((Collection<? extends Point_GIS_layer>) arg0); 
 	}
 
 	@Override
 	public void clear() {
 		set.clear();
-		metaData.minTime = Long.MAX_VALUE;
 	}
 
 	@Override
@@ -75,23 +70,17 @@ public class Point_GIS_project implements GIS_project {
 
 	@Override
 	public boolean remove(Object arg0) {
-		boolean answer = set.remove(arg0);
-		metaData.minTime = findMinTime();
-		return answer;
+		return set.remove(arg0);
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> arg0) {
-		boolean answer = set.removeAll(arg0);
-		metaData.minTime = findMinTime();
-		return answer;
+		return set.removeAll(arg0);
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> arg0) {
-		boolean answer = set.retainAll(arg0);
-		metaData.minTime = findMinTime();
-		return answer;
+		return set.retainAll(arg0);
 	}
 
 	@Override
@@ -113,12 +102,8 @@ public class Point_GIS_project implements GIS_project {
 	public Meta_data get_Meta_data() {
 		return metaData;
 	}
-
-	private long findMinTime() {
-		long min = Long.MAX_VALUE;
-		for (Point_GIS_layer layer: set)
-			if (layer.metaData.getUTC() < min)
-				min = layer.metaData.getUTC();
-		return min;
+	
+	public GIS_Set_Meta_data get_set_Meta_data() {
+		return metaData;
 	}
 }

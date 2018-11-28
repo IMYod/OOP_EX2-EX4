@@ -10,39 +10,63 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import GIS.GIS_element;
+import GIS.GIS_layer;
 import GIS_Point.Point_GIS_element;
 import GIS_Point.Point_GIS_layer;
+import GIS_Point.Point_GIS_project;
 import GIS_Point.Point_Meta_data;
 import Geom.Point3D;
 
-public class GIS_layer2Kml {
+public class GIS2Kml {
 	
+	private Point_GIS_project project;
 	private Point_GIS_layer layer;
 	private StringBuilder kml = new StringBuilder();
+	private String target;
 	public static DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
-
-	public GIS_layer2Kml() {
-		super();
+	
+	public void convert(Point_GIS_project _project, String _target) {
+		project = _project;
+		target = _target;
+		kml.setLength(0);
+		kml.append(beginnigFile());
+		for (GIS_layer _layer: project) {
+			layer = (Point_GIS_layer) _layer;
+			layer2kml();
+		}
+		kml.append(endFile());
+		write(project.get_set_Meta_data().getName());
 	}
 	
-	public void convert(Point_GIS_layer _layer) {
+	public void convert(Point_GIS_layer _layer, String _target) {
 		layer = _layer;
+		target = _target;
+		kml.setLength(0);
+		kml.append(beginnigFile());
 		layer2kml();
-		write();
+		kml.append(endFile());
+		write(layer.get_set_Meta_data().getName());
 	}
 	
-	public StringBuilder layer2kml() {
+	public static String beginnigFile() {
+		String open = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+				"<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><Style id=\"red\"><IconStyle><Icon><href>http://maps.google.com/mapfiles/ms/icons/red-dot.png</href></Icon></IconStyle></Style><Style id=\"yellow\"><IconStyle><Icon><href>http://maps.google.com/mapfiles/ms/icons/yellow-dot.png</href></Icon></IconStyle></Style><Style id=\"green\"><IconStyle><Icon><href>http://maps.google.com/mapfiles/ms/icons/green-dot.png</href></Icon></IconStyle></Style>";
+		return open;
+	}
+	
+	public static String endFile() {
+		String end = "</Document></kml>";
+		return end;
+	}
+	
+	private void layer2kml() {
 
-		kml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-				"<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><Style id=\"red\"><IconStyle><Icon><href>http://maps.google.com/mapfiles/ms/icons/red-dot.png</href></Icon></IconStyle></Style><Style id=\"yellow\"><IconStyle><Icon><href>http://maps.google.com/mapfiles/ms/icons/yellow-dot.png</href></Icon></IconStyle></Style><Style id=\"green\"><IconStyle><Icon><href>http://maps.google.com/mapfiles/ms/icons/green-dot.png</href></Icon></IconStyle></Style><Folder><name>Wifi Networks</name>\n"); //add the open of the line
+		kml.append("<Folder><name>" + layer.get_set_Meta_data().getName() + "</name>\n"); //add the open of the line
 		
 		for (GIS_element element: layer) //add elements
 			kml.append(element2kml(element));
 		
-		kml.append("</Folder>\n"+
-				"</Document></kml>");//The end of the file
-		
-		return kml;
+		kml.append("</Folder>\n");//The end of the file
 	}
 	
 	private StringBuilder element2kml(GIS_element element) {
@@ -78,13 +102,13 @@ public class GIS_layer2Kml {
 		return sb;
 	}
 
-	private void write() {
-		String fileName = layer.metaData.getName()  + ".kml";
+	private void write(String fileName) {
 		PrintWriter pw = null;
 	
 		try 
 		{
-			pw = new PrintWriter(new File(fileName));
+//			pw = new PrintWriter(new File(fileName + ".kml"));
+			pw = new PrintWriter(new File(target + "\\" + fileName + ".kml"));
 		} 
 		catch (FileNotFoundException e) 
 		{

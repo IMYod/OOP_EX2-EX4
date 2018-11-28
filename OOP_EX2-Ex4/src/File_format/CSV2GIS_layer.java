@@ -19,27 +19,32 @@ import Geom.Point3D;
 
 public class CSV2GIS_layer {
 
+	private File file;
 	private String csvName; //name of csv file
 	private final String cvsSplitBy = ","; //the character separator of the csv file
+	
+	
 	private String[] title; //the titles of the csv file, separated
 	private int CurrentLatitude, CurrentLongitude, AltitudeMeters, timeIndex;
-	public static DateFormat format = new SimpleDateFormat("dd-MM-yyyy' 'hh:mm:ss");
+	public final static DateFormat format = new SimpleDateFormat("dd-MM-yyyy' 'hh:mm:ss");
 
 	public GIS_layer create(String fileName) {
-		csvName = fileName;
+		file = new File(fileName);
+		
 		return create();
 	}
 
-	public GIS_layer create(File f) {
-		csvName = f.getName();
+	public GIS_layer create(File _file) {
+		file = _file;
 		return create();
 	}
 
 	private GIS_layer create() {
-		String name = csvName.substring(0, csvName.length()-5); //delete the end-type ".csv"
+		csvName = file.getName();
+		String name = csvName.substring(0, csvName.length()-4); //delete the end-type ".csv"
 		GIS_layer layer = new Point_GIS_layer(name);
 
-		try (BufferedReader br = new BufferedReader(new FileReader(csvName))) 
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) 
 		{
 			String[] csvRow; //one row from the csv file, separated
 			String line = ""; //one row from the csv file

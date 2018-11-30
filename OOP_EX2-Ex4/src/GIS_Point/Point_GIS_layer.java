@@ -1,5 +1,4 @@
 package GIS_Point;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,12 +8,23 @@ import GIS.GIS_element;
 import GIS.GIS_layer;
 import GIS.GIS_element;
 import GIS.Meta_data;
-
+/**
+ * This class is an Collection of a Point Gis Elements.
+ * This class represents a full csv file.
+ * This object will contains all the Point Gis Eelments,
+ * and also his meta data. 
+ * @author Elad and Yoav.
+ *
+ */
 public class Point_GIS_layer implements GIS_layer {
 
 	private Set<Point_GIS_element> set = new HashSet<Point_GIS_element>();
 	protected GIS_Set_Meta_data metaData;
 	
+	/**
+	 * This constructor gets the name of the csv file.
+	 * @param name A string of some file.
+	 */
 	public Point_GIS_layer(String name) {
 		metaData = new GIS_Set_Meta_data(name);
 	}

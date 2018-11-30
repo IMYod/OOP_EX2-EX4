@@ -8,7 +8,12 @@ import GIS.GIS_element;
 import GIS.Meta_data;
 import Geom.Geom_element;
 import Geom.Point3D;
-
+/**
+ * This class is a Point Gis Element which is a one row from a csv file,
+ * 
+ * @author eladn
+ *
+ */
 public class Point_GIS_element implements GIS_element {
 
 	private Point3D point;

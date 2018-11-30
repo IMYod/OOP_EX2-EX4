@@ -1,5 +1,4 @@
 package File_format;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,13 +16,19 @@ import GIS_Point.Point_GIS_element;
 import GIS_Point.Point_GIS_layer;
 import Geom.Point3D;
 
+/**
+ * This class knows how to transform a csv file to 
+ * GIS_layer, That consist a Points elements from the csv file.
+ * 
+ * 
+ * @author Yoav adn Elad.
+ *
+ */
 public class CSV2GIS_layer {
 
 	private File file;
 	private String csvName; //name of csv file
 	private final String cvsSplitBy = ","; //the character separator of the csv file
-	
-	
 	private String[] title; //the titles of the csv file, separated
 	private int CurrentLatitude, CurrentLongitude, AltitudeMeters, timeIndex;
 	public final static DateFormat format = new SimpleDateFormat("dd-MM-yyyy' 'hh:mm:ss");
@@ -38,7 +43,12 @@ public class CSV2GIS_layer {
 		file = _file;
 		return create();
 	}
-
+/**
+ * This private function sends to the Gis_Element use the GIS_element create function
+ * that any row in the csv file transform to GIS_element and push him to the layer. 
+ * 
+ * @return layer that containing the csv file. 
+ */
 	private GIS_layer create() {
 		csvName = file.getName();
 		String name = csvName.substring(0, csvName.length()-4); //delete the end-type ".csv"
@@ -78,7 +88,7 @@ public class CSV2GIS_layer {
 			while ((line = br.readLine()) != null) //add rows
 			{
 				csvRow = line.split(cvsSplitBy);
-				layer.add(create(csvRow));
+				layer.add(create(csvRow)); 
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -90,25 +100,36 @@ public class CSV2GIS_layer {
 
 		return layer;
 	}
-
+/**
+ * This function get a row from csv file, which represents a GIS_element .
+ * And knows to return a Gis element object.
+ * @param points An array that represents a csv row.
+ * @return Gis element object.
+ */
 	private GIS_element create(String[] points) {
 
 		double lat = Double.parseDouble(points[CurrentLatitude]);
 		double lon = Double.parseDouble(points[CurrentLongitude]);
 		double alt = Double.parseDouble(points[AltitudeMeters]);
-		long time = this.stringToTime(points[timeIndex]);
+		long time = this.stringToTime(points[timeIndex]); // Makes it to a long time format.
 
 		Point3D elemntPoint = new Point3D(lat, lon, alt);
-		Point_GIS_element element = new Point_GIS_element(elemntPoint, time);
+		Point_GIS_element element = new Point_GIS_element(elemntPoint, time); 
 
-		for (int i=0; i<points.length; i++) {
+		for (int i=0; i<points.length; i++) {  // looking for the meta data.
 			if (i != CurrentLatitude && i != CurrentLongitude && i != AltitudeMeters && i != timeIndex)
-				element.metaData.addData(title[i], points[i]);
+				element.metaData.addData(title[i], points[i]); //add a meta data to the element.
 		}
 
 		return element;
 	}
-
+/**
+ * This function makes a string that represent a data dnd time to 
+ * an Noun of long object.
+ * @param s Time and date
+ * @return  A represent in a number to the time date string. 
+ */
+	
 	protected static long stringToTime(String s) {
 		try {
 			java.util.Date date = format.parse(s);

@@ -1,5 +1,4 @@
 package File_format;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +6,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * This class transform a csv file to a kml file. without using the gis point element
+ * for more information to the function, you can see the CSV2GIS_layer. 
+ * 
+ * @author Yoav and Elad
+ *
+ */
 public class Csv2Kml {
 
 	private String csvName; //name of csv file
@@ -123,9 +129,9 @@ public class Csv2Kml {
 	}
 	
 	
-	
-	public static void main(String[] args) {
-		Csv2Kml first = new Csv2Kml();
-		first.convert("WigleWifi_20171201110209.csv");
-	}
+//	
+//	public static void main(String[] args) {
+//		Csv2Kml first = new Csv2Kml();
+//		first.convert("WigleWifi_20171201110209.csv");
+//	}
 }

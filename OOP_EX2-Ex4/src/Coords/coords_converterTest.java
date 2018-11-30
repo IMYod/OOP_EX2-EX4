@@ -1,5 +1,4 @@
 package Coords;
-
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,6 +7,13 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import Geom.Point3D;
+/**
+ * This class consist a tests for the MyCoords class, that implements the coords_converter interface.
+ * We made a test for any method that appears in the MyCoords class.
+ * 
+ * @author Yoav and Elad.
+ *
+ */
 
 class coords_converterTest {
 

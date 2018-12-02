@@ -15,12 +15,21 @@ package GUI;
 import java.awt.*;
 import java.awt.event.*;
 
+import Ex3Classes.Fruit;
+import Geom.Point3D;
+
 public class Example01 extends Frame {
 /**
  * Instantiates an Example01 object.
  **/
 public static void main(String args[]) {
-  new Example01();
+	
+	//new Example01();
+	Point3D point = new Point3D(32.00,44.00,50);
+	Fruit banana = new Fruit(point,"Banana");
+	System.out.println(banana);
+	System.out.println(banana.isAlive());
+	System.out.println(banana.getlocation());
 }
 
 /**
